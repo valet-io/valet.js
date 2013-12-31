@@ -10,7 +10,7 @@ var Valet = (function() {
 		attachListeners: function() {
 			var d = document;
 			if (d.addEventListener) {
-				return d.addEventListener('click', this.eventHandlers.click, false);
+				return d.addEventListener('click', this.eventHandlers.click, true);
 			} else if (d.attachEvent) {
 				return d.attachEvent('onclick', this.eventHandlers.click);
 			}
