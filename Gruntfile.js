@@ -54,8 +54,8 @@ module.exports = function(grunt) {
 		}
 	});
 
-	grunt.registerTask('prelint', ['jshint:gruntfile', 'jshint:scripts']);
-	grunt.registerTask('postlint', ['jshint:output']);
+	grunt.registerTask('lint:pre', ['jshint:gruntfile', 'jshint:scripts']);
+	grunt.registerTask('lint:post', ['jshint:output']);
 
 	grunt.registerTask('watch:development', ['jshint:scripts', 'karma:development:start', 'watch:karma']);
 };
