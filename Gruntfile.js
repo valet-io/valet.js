@@ -7,8 +7,8 @@ module.exports = function(grunt) {
 	var app = {
 			build: {
 				dir: 'build',
-				tmp: '.tmp'
-				script: 'valet.js'
+				tmp: '.tmp',
+				script: 'valet.js',
 				style:  'valet.css'
 			}
 		};
@@ -31,9 +31,31 @@ module.exports = function(grunt) {
 			output: {
 				src: '<%= app.build.js %>'
 			}
+		},
+		karma: {
+			options: {
+				runnerPort: 9876,
+				files: ['scripts/*.js', 'test/*.spec.js'],
+				frameworks: ['mocha', 'expect'],
+				preprocessors: {
+					'test/html/*.html': ['html2js']
+				}
+			},
+			development: {
+				browsers: ['PhantomJS'],
+				background: true
+			}
+		},
+		watch: {
+			karma: {
+				files: ['scripts/*.js', 'test/*.spec.js'],
+				tasks: ['karma:development:run']
+			}
 		}
 	});
 
 	grunt.registerTask('prelint', ['jshint:gruntfile', 'jshint:scripts']);
-	grunt.registerTask('postlint', ['jshint:output'])
+	grunt.registerTask('postlint', ['jshint:output']);
+
+	grunt.registerTask('watch:development', ['jshint:scripts', 'karma:development:start', 'watch:karma']);
 };
