@@ -26,7 +26,7 @@ module.exports = function(grunt) {
 				src: 'Gruntfile.js'
 			},
 			scripts: {
-				src: ['scripts/*.js']
+				src: ['src/**/*.js']
 			},
 			output: {
 				src: '<%= app.build.js %>'
@@ -35,8 +35,13 @@ module.exports = function(grunt) {
 		karma: {
 			options: {
 				runnerPort: 9876,
-				files: ['scripts/*.js', 'test/*.spec.js'],
-				frameworks: ['mocha', 'expect'],
+				files: [
+					{pattern: 'src/**/*.js', included: false},
+					{pattern: 'test/**/*.spec.js', included: false},
+					'test/setup.js'
+				],
+				exclude: ['src/initialize.js'],
+				frameworks: ['mocha', 'requirejs', 'expect', 'sinon'],
 				preprocessors: {
 					'test/html/*.html': ['html2js']
 				}
@@ -48,7 +53,7 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			karma: {
-				files: ['scripts/*.js', 'test/*.spec.js'],
+				files: ['src/**/*.js', 'test/**/*.spec.js'],
 				tasks: ['karma:development:run']
 			}
 		}
@@ -57,5 +62,5 @@ module.exports = function(grunt) {
 	grunt.registerTask('lint:pre', ['jshint:gruntfile', 'jshint:scripts']);
 	grunt.registerTask('lint:post', ['jshint:output']);
 
-	grunt.registerTask('watch:development', ['jshint:scripts', 'karma:development:start', 'watch:karma']);
+	grunt.registerTask('watch:development', ['karma:development:start', 'watch:karma']);
 };
