@@ -1,4 +1,4 @@
-define(['api/public/events'], function(EventEmitter) {
+define(['lib/event-emitter'], function(EventEmitter) {
 	'use strict';
 	describe('EventEmitter', function() {
 

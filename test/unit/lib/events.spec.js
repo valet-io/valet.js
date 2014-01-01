@@ -17,7 +17,7 @@ define(['lib/dom-events', 'lib/event-emitter'], function(DOMEvents, EventEmitter
 			});
 
 			afterEach(function() {
-				this.sandbox.restore()
+				this.sandbox.restore();
 			});
 
 			it('handles click events', function(done) {

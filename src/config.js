@@ -1,4 +1,6 @@
 define(function() {
+	'use strict';
+
 	var config = {
 		'donate-url': true,
 		organization: null
@@ -7,17 +9,13 @@ define(function() {
 
 	if (element) {
 		for (var option in config) {
-			var value = element.getAttribute('data-' + option);
-			if (typeof value === 'string') {
-				config[option] = value
+			if (config.hasOwnProperty(option)) {
+				var value = element.getAttribute('data-' + option);
+				if (typeof value === 'string') {
+					config[option] = value;
+				}
 			}
 		}
 	}
 
-	for (var option in config) {
-		if (typeof config[option] !== 'string') {
-			
-		}
-	}
-
-})
+});
