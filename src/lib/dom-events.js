@@ -14,11 +14,10 @@ define(['./event-emitter'], function(EventEmitter) {
 	};
 
 	DOMEvents.prototype.handleEvent = function(event) {
-		console.log('handle event');
 		if (event.type === 'click') {
 			this.emit('click', event);
 		}
-	}
+	};
 
 	return DOMEvents;
 });
