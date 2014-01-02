@@ -36,6 +36,10 @@ define(['lib/http'], function(Http) {
 				expect(this.http).to.have.property('callback', this.cb);
 			});
 
+			it('can take a callback as the first argument', function() {
+				expect(new Http(this.cb)).to.have.property('callback', this.cb);
+			});
+
 		});
 
 		describe('Sending', function() {
@@ -120,19 +124,47 @@ define(['lib/http'], function(Http) {
 
 		});
 
-		describe('Errors', function() {
-
-			it('triggers errors for 400+ status codes');
-			it('embeds the response body in the error');
-			it('triggers errors for timeouts');
-
-		});
-
 		describe('Callback', function() {
 
-			it('makes the node-style callback optional');
-			it('calls with the response body as arg 0');
-			it('calls with an error as arg 1');
+			beforeEach(function() {
+				this.callback = sinon.spy();
+				this.http = new Http(this.callback);
+				this.http.send();
+			});
+
+			describe('Errors', function() {
+
+				it('triggers errors for 400+ status codes', function() {
+					this.request().respond(400);
+					expect(this.callback.calledWith(sinon.match.instanceOf(Error), null)).to.be(true);
+				});
+
+				it('provides a generic error message', function() {
+					this.request().respond(400);
+					expect(this.callback.calledWith(sinon.match.has('message', 'Request failed.'))).to.be(true);
+				});
+
+				it('uses the response body to construct an error message if available', function() {
+					this.request().respond(400, {'Content-Type': 'application/json'}, '{"error": {"message": "em"}}');
+					expect(this.callback.calledWith(sinon.match.has('message', 'em'))).to.be(true);
+				});
+
+				it('embeds the response in the error', function() {
+					this.request().respond(400);
+					expect(this.callback.calledWith(sinon.match.has('response', this.http.response))).to.be(true);
+				});
+
+			});
+
+			describe('Success', function() {
+
+				it('calls the callback with the response', function() {
+					this.request().respond(200, {'Content-Type': 'application/json'}, '{"foo": "bar"}');
+					expect(this.callback.calledWith(null, sinon.match(this.http.response))).to.be(true);
+				});
+
+			});
+
 		});
 
 	});
