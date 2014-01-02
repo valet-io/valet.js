@@ -22,5 +22,6 @@ define(function() {
 		}
 	};
 
+	return Http;
 
 });
