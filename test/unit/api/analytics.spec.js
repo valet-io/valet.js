@@ -26,6 +26,10 @@ define(['api/analytics'], function(Analytics) {
 
 		describe('Processing event queue', function() {
 
+			it('triggers a send cycle on page load');
+			it('triggers cycles when the previous cycle completes');
+
+
 		});
 
 	});

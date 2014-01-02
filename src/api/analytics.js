@@ -11,6 +11,9 @@ define(function() {
 				throw new Error('Event tracking requires an event name');
 			}
 			this._eventQueue.push({event: event, data: data});
+		},
+		send: function() {
+			
 		}
 	};
 
