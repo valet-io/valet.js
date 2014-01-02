@@ -20,6 +20,8 @@
     "karma-phantomjs-launcher": "~0.1.1",
     "karma": "~0.10.9",
     "karma-mocha": "~0.1.1",
-    "grunt-contrib-watch": "~0.5.3"
+    "grunt-contrib-watch": "~0.5.3",
+    "karma-expect": "~1.0.0",
+    "karma-sinon": "~1.0.0"
   }
 }
