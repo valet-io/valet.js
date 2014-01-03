@@ -1,15 +1,5 @@
-define(function() {
+define(['shims/function/bind'], function(bind) {
 	'use strict';
-
-	// Shim Fn.proto.bind
-	Function.prototype.bind = Function.prototype.bind || function(context) {
-		var self = this;
-
-		return function() {
-			return self.apply(context, arguments);
-		};
-	};
-
 
 	function Http(attributes, callback) {
 		if (attributes && typeof attributes !== 'function') {
