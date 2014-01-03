@@ -1,56 +1,54 @@
-define(['lib/dom-events', 'lib/event-emitter'], function(DOMEvents, EventEmitter) {
+define(['lib/event-emitter'], function(EventEmitter) {
 	'use strict';
-
-	describe('DOM Events', function() {
+	describe('EventEmitter', function() {
 
 		beforeEach(function() {
-			this.domEvents = new DOMEvents();
+			this.emitter = new EventEmitter();
 		});
 
-		it('is an event emitter', function() {
-			expect(this.domEvents).to.be.an(EventEmitter);
+		it('begins with no events', function() {
+			for(var event in this.emitter._events) {
+				expect(event).to.be(undefined);
+			}
 		});
 
-		describe('Handling click events', function() {
-			beforeEach(function() {
-				this.sandbox = sinon.sandbox.create();
+		it('registers named events', function() {
+			this.emitter.on('event', function() {});
+			expect(this.emitter._events.event[0]).to.be.a('function');
+		});
+
+		it('can remove listeners', function() {
+			var handler = function() {}
+			this.emitter.on('event', handler);
+			this.emitter.removeListener('event', handler);
+			expect(this.emitter._events.event).to.have.length(0);
+		});
+
+		describe('Emitting events', function() {
+
+			it('calls all listeners when emitting an event', function() {
+				var listener1 = sinon.spy(),
+				    listener2 = sinon.spy();
+
+			    this.emitter.on('event', listener1);
+			    this.emitter.on('event', listener2);
+
+			    this.emitter.emit('event');
+
+			    expect(listener1.called).to.be(true);
+			    expect(listener2.called).to.be(true);
 			});
 
-			afterEach(function() {
-				this.sandbox.restore();
+			it('returns true if there are listeners', function() {
+				this.emitter.on('event', function() {});
+				expect(this.emitter.emit('event')).to.be(true);
 			});
 
-			it('handles click events', function(done) {
-				// Trigger a click event
-				// http://stackoverflow.com/questions/15739263/phantomjs-click-an-element
-				var event = document.createEvent('MouseEvent');
-				event.initMouseEvent(
-					'click',
-					true, true,
-					window, null,
-					0, 0, 0, 0,
-					false, false, false, false,
-					0, null
-				);
-
-				this.sandbox.stub(DOMEvents.prototype, 'handleEvent', function() {
-					done();
-				});
-
-				this.domEvents.attachListeners();
-				document.dispatchEvent(event);
-
+			it('returns false if there are no listeners', function() {
+				expect(this.emitter.emit('event')).to.be(false);
 			});
 
-			it('forwards all click events', function() {
-				var event = {type: 'click'};
-				var spy = sinon.spy();
-				this.domEvents.on('click', spy);
-				this.domEvents.handleEvent(event);
-				expect(spy.calledWithExactly(event)).to.be(true);
-			});
 		});
 
 	});
-
 });
