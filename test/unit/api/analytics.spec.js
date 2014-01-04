@@ -7,6 +7,32 @@ define(['api/analytics', 'lib/http'], function(Analytics, Http) {
 			this.analytics = new Analytics();
 		});
 
+		it('has an event queue', function() {
+			expect(this.analytics.queue).to.be.an(Analytics.EventQueue);
+		});
+
+		describe('Tracking', function() {
+
+			beforeEach(function() {
+				this.event = new Analytics.Event('click');
+			});
+
+			it('accepts event objects', function() {
+				expect(this.analytics.track(this.event)).to.be(this.event);
+			});
+
+			it('casts plain objects into events', function() {
+				expect(this.analytics.track({name: this.event.name, data: this.event.data})).to.be.an(Analytics.Event);
+			});
+
+			it('pushes events into the queue', function() {
+				this.analytics.track(this.event);
+				expect(this.analytics.queue._queue[0])
+					.to.eql(this.event);
+			});
+
+		});
+
 		describe('Events', function() {
 			beforeEach(function() {
 				this.event = new Analytics.Event('click', 'data');
@@ -29,134 +55,142 @@ define(['api/analytics', 'lib/http'], function(Analytics, Http) {
 
 		});
 
-		describe('Tracking events', function() {
+		describe('Queue', function() {
 
 			beforeEach(function() {
-				this.event = new Analytics.Event('click');
+				this.queue = new Analytics.EventQueue();
 			});
 
-			it('accepts event objects', function() {
-				expect(this.analytics.track(this.event)).to.be(this.event);
+			it('has a length', function() {
+				expect(this.queue.length()).to.be(0);
 			});
 
-			it('casts plain objects into events', function() {
-				expect(this.analytics.track({name: this.event.name, data: this.event.data})).to.be.an(Analytics.Event);
+			it('has an internal queue', function() {
+				expect(this.queue._queue).to.be.an(Array);
 			});
 
-			it('pushes events into the queue to be sent to the server', function() {
-				this.analytics.track(this.event);
-				expect(this.analytics._eventQueue[0])
-					.to.be(this.event);
+			it('can instantiate with a queue', function() {
+				var queue = ['foo'];
+				expect(new Analytics.EventQueue(queue))
+					.to.have.property('_queue', queue);
 			});
 
-		});
-
-		describe('Sending queued events', function() {
-
-			beforeEach(function() {
-				this.analytics._eventQueue.push(new Analytics.Event('click'));
+			it('can push items onto the queue', function() {
+				this.queue.push('foo', 'bar');
+				expect(this.queue._queue).to.contain('foo', 'bar');
 			});
 
-			beforeEach(function() {
-				this.xhr = sinon.useFakeXMLHttpRequest();
-				var requests = this.requests = [];
-				this.xhr.onCreate = function (xhr) {
-					requests.push(xhr);
-				};
-				this.request = function() {
-					return requests[0];
-				};
-			});
-
-			it('is a no-op if the queue is empty', function() {
-				this.analytics._eventQueue = [];
-				expect(this.analytics.send()).to.be(undefined);
-			});
-
-			it('is a no-op is there is an existing pending request', function() {
-				this.analytics._eventQueue = [{}];
-				this.analytics.request = {};
-				expect(this.analytics.send()).to.be(undefined);
-			});
-
-			it('creates an HTTP request to send the queue', function() {
-				this.analytics.send();
-				expect(this.analytics.request).to.be.a(Http);
-			});
-
-			it('adds the event queue to the request data', function() {
-				this.analytics.send();
-				expect(this.analytics.request.data).to.have.property('events', this.analytics._eventQueue);
-			});
-
-			it('returns the number of sent items', function() {
-				expect(this.analytics.send()).to.be(1);
-			});
-
-			describe('Handling the response', function() {
+			describe('Sending', function() {
 
 				beforeEach(function() {
-					this.handler = sinon.spy(this.analytics, '_responseHandler');
-					this.callback = sinon.spy();
-					this.analytics.send(this.callback);
+					this.queue.push(new Analytics.Event('click'));
 				});
 
-				afterEach(function() {
-					this.xhr.restore();
+				beforeEach(function() {
+					this.xhr = sinon.useFakeXMLHttpRequest();
+					var requests = this.requests = [];
+					this.xhr.onCreate = function (xhr) {
+						requests.push(xhr);
+					};
+					this.request = function() {
+						return requests[0];
+					};
 				});
 
-				describe('Always', function() {
+				it('is a no-op if the queue is empty', function() {
+					this.queue.empty();
+					expect(this.queue.send()).to.be(undefined);
+				});
+
+				it('is a no-op is there is an existing pending request', function() {
+					this.queue.request = {};
+					expect(this.queue.send()).to.be(undefined);
+				});
+
+				it('moves the queue into a pending set', function() {
+					this.queue.send();
+					expect(this.queue._pending).to.have.length(1);
+				});
+
+				it('empties the queue', function() {
+					this.queue.send();
+					expect(this.queue.length()).to.be(0);
+				});
+
+				it('creates an HTTP request to send the queue', function() {
+					this.queue.send();
+					expect(this.queue.request).to.be.a(Http);
+				});
+
+				it('adds the event queue to the request data', function() {
+					this.queue.send();
+					expect(this.queue.request.data).to.have.property('events', this.queue._queue);
+				});
+
+				it('returns the number of sent items', function() {
+					expect(this.queue.send()).to.be(1);
+				});
+
+				describe('Response', function() {
 
 					beforeEach(function() {
-						this.request().respond(200);
+						this.handler = sinon.spy(this.queue, '_onReceived');
+						this.callback = sinon.spy();
+						this.queue.send(this.callback);
 					});
 
-					it('deletes the request', function() {
-						expect(this.analytics.request).to.be(null);
+					afterEach(function() {
+						this.xhr.restore();
 					});
 
-					it('calls the callback', function() {
-						expect(this.callback.calledOnce).to.be(true);
+					describe('Always', function() {
+
+						beforeEach(function() {
+							this.request().respond(200);
+						});
+
+						it('deletes the request', function() {
+							expect(this.queue.request).to.not.be.ok();
+						});
+
+						it('calls the callback', function() {
+							expect(this.callback.calledOnce).to.be(true);
+						});
+
+						it('calls the callback with node-style arguments', function() {
+							expect(this.callback.calledWith(null, sinon.match.object)).to.be(true);
+						});
+
 					});
 
-					it('calls the callback with node-style arguments', function() {
-						expect(this.callback.calledWith(null, sinon.match.instanceOf(Error)));
+					describe('Success', function() {
+
+						beforeEach(function() {
+							this.request().respond(200);
+						});
+
+						it('clears the queue', function() {
+							expect(this.queue.length()).to.be(0);
+						});
+
 					});
 
-				});
+					describe('Failure', function() {
+						beforeEach(function() {
+							this.queue.push(new Analytics.Event('click2'));
+							this.request().respond(400);
+						});
 
-				describe('Success', function() {
+						it('pushes pending items onto the front of the queue', function() {
+							expect(this.queue._queue[0]).to.have.property('name', 'click');
+							expect(this.queue.length()).to.be(2);
+						});
 
-					beforeEach(function() {
-						this.request().respond(200);
-					});
-
-					it('clears the queue', function() {
-						expect(this.analytics._eventQueue).to.have.length(0);
-					});
-
-				});
-
-				describe('Failure', function() {
-					beforeEach(function() {
-						this.request().respond(400);
-					});
-
-					it('preserves the queue for a retry', function() {
-						expect(this.analytics._eventQueue).to.have.length(1);
 					});
 
 				});
 
 			});
-
-		});
-
-		describe('Processing event queue', function() {
-
-			it('triggers a send cycle on page load');
-			it('triggers cycles when the previous cycle completes');
-
 
 		});
 
