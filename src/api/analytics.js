@@ -3,10 +3,6 @@ define(['lib/http', 'shims/function/bind'], function(Http) {
 
 	function Analytics() {}
 
-	Analytics.EventQueue = function(queue) {
-		this._queue = queue || [];
-	};
-
 	Analytics.Event = function(name, data) {
 		if (typeof name !== 'string') {
 			throw new Error('Event must define a name.');
@@ -17,6 +13,10 @@ define(['lib/http', 'shims/function/bind'], function(Http) {
 
 	Analytics.Event.prototype = {
 		timestamp: new Date()
+	};
+
+	Analytics.EventQueue = function(queue) {
+		this._queue = queue || [];
 	};
 
 	Analytics.EventQueue.prototype = {
