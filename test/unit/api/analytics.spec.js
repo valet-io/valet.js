@@ -80,6 +80,53 @@ define(['api/analytics', 'lib/http'], function(Analytics, Http) {
 				expect(this.queue._queue).to.contain('foo', 'bar');
 			});
 
+			describe('Polling', function() {
+
+				beforeEach(function() {
+					this.clock = sinon.useFakeTimers();
+					sinon.spy(this.queue, 'send');
+					this.queue.poll();
+					sinon.spy(this.queue, 'poll');
+				});
+
+				afterEach(function() {
+					this.queue.send.restore();
+					this.clock.restore();
+				});
+
+				it('defines a send interval', function() {
+					expect(this.queue.interval).to.be.a('number');
+				});
+
+				it('repolls at the next interval if the queue is empty', function() {
+					this.clock.tick(this.queue.interval * 2);
+					sinon.assert.calledOnce(this.queue.poll);
+				});
+
+				it('sends if the queue has items', function() {
+					this.queue.push(new Analytics.Event('click'));
+					this.clock.tick(this.queue.interval);
+					sinon.assert.calledOnce(this.queue.send);
+				});
+
+				it('repolls at the next interval when send() receives a response', function() {
+					var xhr = sinon.useFakeXMLHttpRequest();
+					var requests = [];
+					xhr.onCreate = function(request) {
+						requests.push(request);
+					};
+					this.queue.push(new Analytics.Event('click'));
+					this.clock.tick(this.queue.interval);
+					sinon.assert.calledOnce(this.queue.send);
+					requests[0].respond(200);
+					sinon.assert.calledOnce(this.queue.poll);
+					this.queue.push(new Analytics.Event('click2'));
+					this.clock.tick(this.queue.interval);
+					sinon.assert.calledTwice(this.queue.send);
+				});
+				
+			});
+
 			describe('Sending', function() {
 
 				beforeEach(function() {
@@ -89,7 +136,7 @@ define(['api/analytics', 'lib/http'], function(Analytics, Http) {
 				beforeEach(function() {
 					this.xhr = sinon.useFakeXMLHttpRequest();
 					var requests = this.requests = [];
-					this.xhr.onCreate = function (xhr) {
+					this.xhr.onCreate = function(xhr) {
 						requests.push(xhr);
 					};
 					this.request = function() {
@@ -124,7 +171,7 @@ define(['api/analytics', 'lib/http'], function(Analytics, Http) {
 
 				it('adds the event queue to the request data', function() {
 					this.queue.send();
-					expect(this.queue.request.data).to.have.property('events', this.queue._queue);
+					expect(this.queue.request.data.events).to.have.length(1);
 				});
 
 				it('returns the number of sent items', function() {

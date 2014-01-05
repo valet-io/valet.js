@@ -20,6 +20,18 @@ define(['lib/http', 'shims/function/bind'], function(Http) {
 	};
 
 	Analytics.EventQueue.prototype = {
+		interval: 1000,
+		poll: function() {
+			setTimeout(function() {
+				if (this.length()) {
+					this.send(function() {
+						this.poll();
+					});
+				} else {
+					setTimeout(this.poll.bind(this), this.interval);
+				}
+			}.bind(this), this.interval);
+		},
 		length: function() {
 			return this._queue.length;
 		},
@@ -33,8 +45,8 @@ define(['lib/http', 'shims/function/bind'], function(Http) {
 		send: function(callback) {
 			if (!this.length() || this.request) {return;}
 			this._pending = this._queue;
-			this.empty();
 			this.request = new Http({data: {events: this._queue}}, this._onReceived(callback));
+			this.empty();
 			this.request.send();
 			return this._pending.length;
 		},
@@ -43,24 +55,29 @@ define(['lib/http', 'shims/function/bind'], function(Http) {
 			return function(err, response) {
 				this.request = null;
 				if (!err) {
+					this._pending = [];
 					this.empty();
 				} else {
 					this._queue = this._pending.concat(this._queue);
 				}
 				if (callback) {
-					return callback(err, response);
+					callback.call(this, err, response);
 				}
 			}.bind(this);
 		}
 	};
 
 	Analytics.prototype = {
+		initialize: function() {
+			this.queue.poll();
+		},
 		queue: new Analytics.EventQueue(),
 		track: function(event) {
 			if (!(event instanceof Analytics.Event)) {
 				event = new Analytics.Event(event.name, event.data);
 			}
 			this.queue.push(event);
+
 			return event;
 		}
 	};
