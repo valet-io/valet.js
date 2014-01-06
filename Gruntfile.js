@@ -46,7 +46,7 @@ module.exports = function(grunt) {
 					{pattern: patterns.src, included: false},
 					{pattern: patterns.spec, included: false},
 					{pattern: 'components/**/*.js', included: false},
-					{pattern: 'templates/*.html', included: false},
+					{pattern: 'templates/html/**/*.html', included: false},
 					'test/setup.js'
 				],
 				exclude: ['src/initialize.js'],
@@ -57,6 +57,20 @@ module.exports = function(grunt) {
 				preprocessors: {},
 				browsers: ['PhantomJS'],
 				background: true
+			}
+		},
+		stylus: {
+			development: {
+				options: {
+					compress: false,
+					files: [{
+						expand: true,
+						cwd: 'styles/',
+						src: ['**/*.styl'],
+						dest: '.tmp/',
+						ext: '.css'
+					}]
+				}
 			}
 		},
 		watch: {
