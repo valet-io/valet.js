@@ -1,0 +1,14 @@
+{
+  "name": "domReady",
+  "_cacheHeaders": {
+    "ETag": "\"e2f94d345503940fadeddeb15488aa41\"",
+    "Content-Length": "32682",
+    "Content-Type": "text/html; charset=utf-8"
+  },
+  "_release": "e-tag:e2f94d345",
+  "main": "index",
+  "_source": "https://github.com/requirejs/domReady",
+  "_target": "*",
+  "_originalSource": "https://github.com/requirejs/domReady",
+  "_direct": true
+}
