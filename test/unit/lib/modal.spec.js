@@ -1,4 +1,4 @@
-define(['src/lib/modal'], function(Modal) {
+define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 	'use strict';
 
 	describe('Modal', function() {
@@ -59,7 +59,7 @@ define(['src/lib/modal'], function(Modal) {
 				});
 
 				it('loads the modal template into the container', function() {
-					expect(this.modal.element.innerHTML[0]).to.be('<');
+					expect(this.modal.element.innerHTML).to.match(/^<style>/);
 				});
 
 				it('emits a loading event', function() {

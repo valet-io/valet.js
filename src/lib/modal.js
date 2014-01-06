@@ -1,4 +1,4 @@
-define(['require', 'src/lib/event-emitter', 'src/shims/function/bind'], function(require, EventEmitter) {
+define(['src/lib/event-emitter', 'src/lib/template', 'src/shims/function/bind'], function(EventEmitter, template) {
 	'use strict';
 
 	function Modal(element) {
@@ -17,9 +17,11 @@ define(['require', 'src/lib/event-emitter', 'src/shims/function/bind'], function
 	};
 
 	Modal.prototype.load = function(callback) {
-		require(['text!templates/modal.html'], function(template) {
-			this.element.innerHTML = template;
-			this.emit('loading');
+		template('modal', function(err, template) {
+			if (!err) {
+				this.element.innerHTML = template;
+				this.emit('loading');
+			}
 			callback();
 		}.bind(this));
 	};

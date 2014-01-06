@@ -47,6 +47,7 @@ module.exports = function(grunt) {
 					{pattern: patterns.spec, included: false},
 					{pattern: 'components/**/*.js', included: false},
 					{pattern: 'templates/html/**/*.html', included: false},
+					{pattern: 'templates/styles/**/*.css', included: false},
 					'test/setup.js'
 				],
 				exclude: ['src/initialize.js'],
