@@ -45,16 +45,16 @@ module.exports = function(grunt) {
 				files: [
 					{pattern: patterns.src, included: false},
 					{pattern: patterns.spec, included: false},
+					{pattern: 'components/**/*.js', included: false},
+					{pattern: 'templates/*.html', included: false},
 					'test/setup.js'
 				],
 				exclude: ['src/initialize.js'],
 				frameworks: ['mocha', 'requirejs', 'expect', 'sinon'],
-				preprocessors: {
-					'test/integration/html/*.html': ['html2js']
-				},
 				browsers: ['PhantomJS']
 			},
 			unit: {
+				preprocessors: {},
 				browsers: ['PhantomJS'],
 				background: true
 			}
