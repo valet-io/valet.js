@@ -1,4 +1,4 @@
-define(['lib/http', 'shims/function/bind'], function(Http) {
+define(['src/lib/http', 'src/shims/function/bind'], function(Http) {
 	'use strict';
 
 	function Analytics() {}

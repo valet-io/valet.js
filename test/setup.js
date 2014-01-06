@@ -6,7 +6,12 @@ for (var file in window.__karma__.files) {
 }
 
 requirejs.config({
-	baseUrl: '/base/src',
+	baseUrl: '/base',
 	deps: tests,
-	callback: window.__karma__.start
+	callback: window.__karma__.start,
+	paths: {
+		text: 'components/text/text',
+		domReady: 'components/domReady/text',
+		spin: 'components/spin/spin'
+	}
 });

@@ -1,4 +1,4 @@
-define(['api/analytics', 'lib/analytics'], function(api, Analytics) {
+define(['src/api/analytics', 'src/lib/analytics'], function(api, Analytics) {
 
 	describe('Tracking', function() {
 

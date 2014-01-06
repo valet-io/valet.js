@@ -1,4 +1,4 @@
-define(['lib/analytics', 'lib/http'], function(Analytics, Http) {
+define(['src/lib/analytics', 'src/lib/http'], function(Analytics, Http) {
 	'use strict';
 
 	describe('Analytics library', function() {

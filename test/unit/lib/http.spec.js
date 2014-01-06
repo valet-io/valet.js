@@ -1,4 +1,4 @@
-define(['lib/http'], function(Http) {
+define(['src/lib/http'], function(Http) {
 	'use strict';
 	describe('AJAX', function() {
 

@@ -5,7 +5,7 @@ describe('Function.prototype.bind', function() {
 		Function.prototype.bind = undefined;
 	});
 
-	define(['shims/function/bind'], function() {
+	define(['src/shims/function/bind'], function() {
 
 		it('can bind the call context', function() {
 			var ctx = {};

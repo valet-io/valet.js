@@ -1,4 +1,4 @@
-define(['./event-emitter'], function(EventEmitter) {
+define(['src/lib/event-emitter'], function(EventEmitter) {
 	'use strict';
 
 	function DOMEvents() {}

@@ -1,4 +1,4 @@
-define(['lib/analytics'], function(Analytics) {
+define(['src/lib/analytics'], function(Analytics) {
 	'use strict';
 	var analytics = new Analytics();
 	analytics.track = function(event) {

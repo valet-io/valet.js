@@ -1,4 +1,4 @@
-define(['shims/function/bind'], function(bind) {
+define(['src/shims/function/bind'], function(bind) {
 	'use strict';
 
 	function Http(attributes, callback) {
