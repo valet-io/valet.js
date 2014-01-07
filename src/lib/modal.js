@@ -17,7 +17,7 @@ define(['src/lib/event-emitter', 'src/lib/template', 'src/shims/function/bind'],
 	};
 
 	Modal.prototype.load = function(callback) {
-		template('modal', function(err, template) {
+		template('modal', null, function(err, template) {
 			if (!err) {
 				this.element.innerHTML = template;
 				this.emit('loading');

@@ -1,10 +1,11 @@
-define(['require', 'text'], function(require) {
+define(['require', 'text', 'hbs'], function(require) {
 	'use strict';
-	return function template(name, callback) {
-		var htmlPath = 'templates/html/' + name + '.html',
+	return function template(name, data, callback) {
+		var hbsPath = 'templates/markup/' + name,
 		cssPath = 'templates/styles/' + name + '.css';
-		require(['text!' + htmlPath, 'text!' + cssPath], function(markup, styles) {
-			var template = '<style>' + styles + '</style>' + markup;
+		require(['hbs!' + hbsPath, 'text!' + cssPath], function(markupTemplate, styles) {
+			var markup = markupTemplate(data),
+			template = '<style>' + styles + '</style>' + markup;
 			callback(null, template);
 		}, function(error) {
 			callback(error);

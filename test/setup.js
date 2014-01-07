@@ -12,6 +12,7 @@ requirejs.config({
 	paths: {
 		text: 'components/text/text',
 		domReady: 'components/domReady/text',
-		spin: 'components/spin/spin'
+		spin: 'components/spin/spin',
+		hbs: 'components/require-handlebars-plugin/hbs'
 	}
 });

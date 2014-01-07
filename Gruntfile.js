@@ -46,7 +46,7 @@ module.exports = function(grunt) {
 					{pattern: patterns.src, included: false},
 					{pattern: patterns.spec, included: false},
 					{pattern: 'components/**/*.js', included: false},
-					{pattern: 'templates/html/**/*.html', included: false},
+					{pattern: 'templates/markup/**/*.hbs', included: false},
 					{pattern: 'templates/styles/**/*.css', included: false},
 					'test/setup.js'
 				],
