@@ -60,6 +60,14 @@ module.exports = function(grunt) {
 				background: true
 			}
 		},
+		connect: {
+			test: {
+				options: {
+					base: 'test/integration/html',
+					port: 9800
+				}
+			}
+		},
 		stylus: {
 			development: {
 				options: {
@@ -85,6 +93,11 @@ module.exports = function(grunt) {
 	grunt.registerTask('lint:pre', ['jshint:gruntfile', 'jshint:scripts']);
 	grunt.registerTask('lint:post', ['jshint:output']);
 
-	grunt.registerTask('development', ['lint:pre', 'karma:unit:start', 'watch:karma']);
+	grunt.registerTask('development', [
+		'lint:pre',
+		'karma:unit:start',
+		'connect:test',
+		'watch:karma'
+	]);
 
 };
