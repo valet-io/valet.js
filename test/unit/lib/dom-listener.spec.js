@@ -38,6 +38,26 @@ define(['src/lib/dom-listener'], function(DOMListener) {
 			sinon.assert.calledWith(this.listener.emit, 'custom', event);
 		});
 
+		describe('Filtered events', function() {
+
+			it('emits events if the filter returns truthy', function() {
+				this.listener.filter = function() {
+					return true;
+				};
+				this.listener.handle('name')();
+				sinon.assert.calledWith(this.listener.emit, 'name');
+			});
+
+			it('cancels events if the filter returns falsy', function() {
+				this.listener.filter = function() {
+					return false;
+				};
+				this.listener.handle('name')();
+				sinon.assert.notCalled(this.listener.emit);
+			});
+
+		});
+
 	});
 
 });

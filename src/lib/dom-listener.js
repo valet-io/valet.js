@@ -22,7 +22,9 @@ define(['src/lib/event-emitter', 'src/shims/function/bind'], function(EventEmitt
 
 	DOMListener.prototype.handle = function(name) {
 		return function(event) {
-			this.emit(name, event);
+			if (!this.filter || (this.filter && this.filter(event))) {
+				this.emit(name, event);
+			};
 		}.bind(this);
 	};
 
