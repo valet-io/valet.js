@@ -1,49 +1,66 @@
 define(['src/lib/template', 'src/shims/function/bind'], function(template) {
-
+	'use strict';
 	describe('Template', function() {
 
 		before(function() {
-			this.xhr = sinon.useFakeXMLHttpRequest();
+			this.server = sinon.fakeServer.create();
 		});
 
 		after(function() {
-			this.xhr.restore();
+			this.server.restore();
 		});
 
-		before(function(done) {
-			this.callback = sinon.spy();
-			template('foo', {property: 'templateVal'}, this.callback);
-			this.requests = [];
-			this.xhr.onCreate = function(xhr) {
-				if (this.requests.push(xhr) == 2) {done();}
-			}.bind(this);
+		beforeEach(function() {
+			this.server.respondWith('GET', '/base/templates/markup/foo.hbs',
+				[200, {}, '{{property}}']);
+			this.server.respondWith('GET', '/base/templates/styles/foo.css',
+				[200, {}, 'css']);
+			this.server.autoRespond = true;
 		});
 
-		describe('Request', function() {
+		describe('Success', function() {
 
-			it('requests the HTML markup', function() {
-				expect(this.requests[0].url).to.match(/\/templates\/markup\/foo.hbs$/)
+			beforeEach(function(done) {
+				this.compiled = {
+					markup: 'templateVal',
+					styles: '<style>css</style>'
+				};
+				this.callback = sinon.spy(function(err, template) {
+					this.template = template;
+					this.err = err;
+					done();
+				}.bind(this));
+				template('foo', {property: 'templateVal'}, this.callback);
 			});
 
-			it('requests the CSS styles', function() {
-				expect(this.requests[1].url).to.match(/\/templates\/styles\/foo.css$/);
+			it('compiles the handlebars template', function() {
+				expect(this.template).to.contain(this.compiled.markup);
 			});
 
-		});
-
-		describe('Generated Template', function() {
-
-			before(function(done) {
-				this.requests[0].respond(200, {}, '{{property}}');
-				this.requests[1].respond(200, {}, 'css');
-				// Dirty hack to let templates compile without using the callback
-				setTimeout(done, 0);
+			it('wraps the CSS in style tags', function() {
+				expect(this.template).to.contain(this.compiled.styles);
 			});
 
 			it('concatenates the HTML and CSS', function() {
-				sinon.assert.calledWith(this.callback, null, "<style>css</style>templateVal");
+				expect(this.template).to.be(this.compiled.styles + this.compiled.markup);
 			});
-		})
+
+		});
+
+		describe('Failure', function() {
+
+			beforeEach(function(done) {
+				this.callback = sinon.spy(function() {
+					done();
+				});
+				template('bad', null, this.callback);
+			});
+
+			it('calls the callback with the error', function() {
+				sinon.assert.calledWith(this.callback, sinon.match.instanceOf(Error));
+			});
+
+		});
 
 	});
 });
