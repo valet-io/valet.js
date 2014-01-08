@@ -1,8 +1,9 @@
 define(['src/lib/event-emitter', 'src/lib/template', 'src/shims/function/bind'], function(EventEmitter, template) {
 	'use strict';
 
-	function Modal(element) {
+	function Modal(element, options) {
 		this.element = element;
+		this.options = options;
 	}
 
 	Modal.prototype = new EventEmitter();
@@ -17,7 +18,7 @@ define(['src/lib/event-emitter', 'src/lib/template', 'src/shims/function/bind'],
 	};
 
 	Modal.prototype.load = function(callback) {
-		template('modal', null, function(err, template) {
+		template('modal', this.options, function(err, template) {
 			if (!err) {
 				this.element.innerHTML = template;
 				this.emit('loading');

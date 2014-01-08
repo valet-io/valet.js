@@ -4,7 +4,7 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 	describe('Modal', function() {
 
 		beforeEach(function() {
-			this.modal = new Modal();
+			this.modal = new Modal(null, {url: 'http://google.com'});
 			sinon.spy(this.modal, 'emit');
 		});
 
