@@ -1,0 +1,8 @@
+Frame content
+
+<script>
+var page = location.hash.substring(location.hash.indexOf('=') + 1);
+var pageArray = page.split('/');
+var origin = pageArray[0] + '//' + pageArray[2];
+window.parent.postMessage('load', origin);
+</script>

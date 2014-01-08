@@ -24,7 +24,7 @@ define(['src/lib/event-emitter', 'src/shims/function/bind'], function(EventEmitt
 		return function(event) {
 			if (!this.filter || (this.filter && this.filter(event))) {
 				this.emit(name, event);
-			};
+			}
 		}.bind(this);
 	};
 

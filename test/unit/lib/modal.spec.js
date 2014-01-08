@@ -4,7 +4,10 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 	describe('Modal', function() {
 
 		beforeEach(function() {
-			this.modal = new Modal(null, {url: 'http://google.com'});
+			this.modal = new Modal(null, {
+				url: 'http://localhost:9800/frame.html',
+				page: location.href
+			});
 			sinon.spy(this.modal, 'emit');
 		});
 
@@ -52,7 +55,7 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 
 			});
 
-			describe('Loading Content', function() {
+			describe('Loading Content (Frame)', function() {
 
 				beforeEach(function(done) {
 					this.modal.load(done);
@@ -64,6 +67,20 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 
 				it('emits a loading event', function() {
 					sinon.assert.calledWith(this.modal.emit, 'loading');
+				});
+
+				it('attaches the frame event emitter to the modal', function() {
+					expect(this.modal.frame).to.have.property('emit');
+				});
+
+				it('repeats and prefixes frame messages', function() {
+					this.modal.frame.emit('message', {data: 'event'});
+					sinon.assert.calledWith(this.modal.emit, 'frame::event');
+				});
+
+				it('emits a ready event when the frame acknowledges load', function() {
+					this.modal.emit('frame::load');
+					sinon.assert.calledWith(this.modal.emit, 'ready');
 				});
 
 			});
