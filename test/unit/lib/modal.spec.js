@@ -113,6 +113,31 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 
 			});
 
+			describe('Showing the modal before load', function() {
+
+				beforeEach(function(done) {
+					this.server = sinon.fakeServer.create();
+					this.server.respondWith('GET', '/base/templates/modal/modal.css',
+						[200, {}, 'css']);
+					this.server.autoRespond = true;
+					this.server.autoRespondAfter(100);
+					this.callback = sinon.spy();
+					this.modal.load(this.callback);
+					this.modal.show();
+				});
+
+				afterEach(function() {
+					this.server.restore()
+				});
+
+				it('shows a loading overlay');
+
+				it('can hide the overlay while load continues');
+
+				it('shows an error if the load fails');
+
+			})
+
 		});
 
 	});
