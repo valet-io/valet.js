@@ -1,14 +1,15 @@
 {
   "name": "domReady",
-  "_cacheHeaders": {
-    "ETag": "\"e2f94d345503940fadeddeb15488aa41\"",
-    "Content-Length": "32682",
-    "Content-Type": "text/html; charset=utf-8"
+  "homepage": "https://github.com/requirejs/domReady",
+  "version": "2.0.1",
+  "_release": "2.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.0.1",
+    "commit": "850d9c92541afac5d9c64506736272cdbf7a3ae5"
   },
-  "_release": "e-tag:e2f94d345",
-  "main": "index",
-  "_source": "https://github.com/requirejs/domReady",
-  "_target": "*",
-  "_originalSource": "https://github.com/requirejs/domReady",
+  "_source": "https://github.com/requirejs/domReady.git",
+  "_target": "~2.0.1",
+  "_originalSource": "https://github.com/requirejs/domReady.git",
   "_direct": true
 }
