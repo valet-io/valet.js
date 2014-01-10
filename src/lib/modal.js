@@ -54,7 +54,7 @@ define(['src/lib/event-emitter',
 
 		Modal.prototype.isVisible = function() {
 			return this.element.style.display === 'block';
-		}
+		};
 
 		return Modal;
 	});
