@@ -59,6 +59,10 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 
 				beforeEach(function(done) {
 					this.server = sinon.fakeServer.create();
+					this.server.xhr.useFilters = true;
+					this.server.xhr.addFilter(function(method, url) {
+						return !url.match(/\.css/);
+					});
 					this.server.respondWith('GET', '/base/templates/modal/modal.css',
 						[200, {}, 'css']);
 					this.server.autoRespond = true;
@@ -70,7 +74,7 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 				});
 
 				it('loads the modal template into the container', function() {
-					expect(this.modal.element.innerHTML).to.match(/^<style>css<\/style>/);
+					expect(this.modal.element.innerHTML).to.match(/^<style>css<\/style><div/);
 				});
 
 				it('emits a ready event', function() {
@@ -134,7 +138,19 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 
 				it('can hide the overlay while load continues');
 
-				it('shows an error if the load fails');
+				describe('Load succeeds', function() {
+
+					it('destroys the DOM elements');
+
+				});
+
+				describe('Load fails', function() {
+
+					it('shows an error if the load fails');
+
+					it('hides the load spinner');
+
+				});
 
 			})
 
