@@ -58,11 +58,19 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 			describe('Loading Content (Frame)', function() {
 
 				beforeEach(function(done) {
+					this.server = sinon.fakeServer.create();
+					this.server.respondWith('GET', '/base/templates/modal/modal.css',
+						[200, {}, 'css']);
+					this.server.autoRespond = true;
 					this.modal.load(done);
 				});
 
+				afterEach(function() {
+					this.server.restore();
+				});
+
 				it('loads the modal template into the container', function() {
-					expect(this.modal.element.innerHTML).to.match(/^<style>/);
+					expect(this.modal.element.innerHTML).to.match(/^<style>css<\/style>/);
 				});
 
 				it('emits a loading event', function() {
