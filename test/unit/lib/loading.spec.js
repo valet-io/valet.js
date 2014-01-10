@@ -54,6 +54,10 @@ define(['src/lib/loading'], function(LoadingOverlay) {
 				this.overlay.initialize(done);
 			});
 
+			afterEach(function() {
+				this.server.restore();
+			});
+
 			it('populates the element with the template', function() {
 				expect(this.overlay.element.innerHTML).to.match(/^<style>css<\/style><div/);
 			});

@@ -23,6 +23,7 @@
     "grunt-contrib-watch": "~0.5.3",
     "karma-expect": "~1.0.0",
     "karma-sinon": "~1.0.0",
-    "grunt-contrib-connect": "~0.6.0"
+    "grunt-contrib-connect": "~0.6.0",
+    "karma-stylus-preprocessor": "0.0.1"
   }
 }

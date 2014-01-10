@@ -47,6 +47,7 @@ module.exports = function(grunt) {
 					{pattern: patterns.spec, included: false},
 					{pattern: 'components/**/*.js', included: false},
 					{pattern: 'templates/**/*.hbs', included: false},
+					{pattern: 'templates/**/*.styl', included: false},
 					'test/setup.js'
 				],
 				exclude: ['src/initialize.js'],
@@ -54,7 +55,9 @@ module.exports = function(grunt) {
 				browsers: ['PhantomJS']
 			},
 			unit: {
-				preprocessors: {},
+				preprocessors: {
+					'templates/**/*.styl': ['stylus']
+				},
 				browsers: ['PhantomJS'],
 				background: true
 			}
