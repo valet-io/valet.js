@@ -11,9 +11,9 @@ define(['src/lib/template', 'src/shims/function/bind'], function(template) {
 		});
 
 		beforeEach(function() {
-			this.server.respondWith('GET', '/base/templates/markup/foo.hbs',
+			this.server.respondWith('GET', '/base/templates/foo/foo.hbs',
 				[200, {}, '{{property}}']);
-			this.server.respondWith('GET', '/base/templates/styles/foo.css',
+			this.server.respondWith('GET', '/base/templates/foo/foo.css',
 				[200, {}, 'css']);
 			this.server.autoRespond = true;
 		});
