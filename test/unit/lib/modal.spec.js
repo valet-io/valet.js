@@ -69,7 +69,7 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 					sinon.assert.calledWith(this.modal.emit, 'loading');
 				});
 
-				it('attaches the frame event emitter to the modal', function() {
+				it('attaches the frame postMessage emitter to the modal', function() {
 					expect(this.modal.frame).to.have.property('emit');
 				});
 
