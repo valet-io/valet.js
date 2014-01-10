@@ -31,13 +31,13 @@ define(['src/lib/event-emitter',
 			}, function(err, template) {
 					if (!err) {
 						this.element.innerHTML = template;
-						this.emit('loading');
+						this.emit('ready');
 						this.frame = new DOMListener(window, 'message');
 						this.frame.on('message', function(event) {
 							this.emit('frame::' + event.data);
 						}.bind(this));
 						this.on('frame::load', function() {
-							this.emit('ready');
+							this.emit('load');
 						});
 					}
 					callback(err);

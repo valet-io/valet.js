@@ -73,8 +73,8 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 					expect(this.modal.element.innerHTML).to.match(/^<style>css<\/style>/);
 				});
 
-				it('emits a loading event', function() {
-					sinon.assert.calledWith(this.modal.emit, 'loading');
+				it('emits a ready event', function() {
+					sinon.assert.calledWith(this.modal.emit, 'ready');
 				});
 
 				it('attaches the frame postMessage emitter to the modal', function() {
@@ -86,9 +86,9 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 					sinon.assert.calledWith(this.modal.emit, 'frame::event');
 				});
 
-				it('emits a ready event when the frame acknowledges load', function() {
+				it('emits a load event when the frame acknowledges load', function() {
 					this.modal.emit('frame::load');
-					sinon.assert.calledWith(this.modal.emit, 'ready');
+					sinon.assert.calledWith(this.modal.emit, 'load');
 				});
 
 			});
