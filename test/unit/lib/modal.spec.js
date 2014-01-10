@@ -85,6 +85,26 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 
 			});
 
+			describe('Toggling Visibility', function() {
+
+				it('can be shown', function() {
+					this.modal.show();
+					expect(this.element.style.display).to.be('block');
+				});
+
+				it('can be hidden', function() {
+					this.modal.show();
+					this.modal.hide();
+					expect(this.element.style.display).to.be('none');
+				});
+
+				it('can check its visibility status', function() {
+					this.modal.show();
+					expect(this.modal.isVisible()).to.be(true);
+				});
+
+			});
+
 		});
 
 	});
