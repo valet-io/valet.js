@@ -63,7 +63,7 @@ module.exports = function(grunt) {
 				browsers: ['PhantomJS'],
 				stylusPreprocessor: {
 					options: {
-						paths: ['templates/styles']
+						paths: ['styles']
 					}
 				},
 				background: true

@@ -1,0 +1,19 @@
+.valet-io-overlay-button
+	$color = rgba(white, .5)
+
+	background none
+	color $color
+	border $color 1px solid
+	text-transform uppercase
+	border-radius 3px
+	padding .5em
+	font-family inherit
+	cursor: pointer
+
+	transition: all .1s ease-in-out
+
+	&:hover
+		$color = rgba(white, .75)
+		color $color
+		border-color $color
+		padding .5em .75em

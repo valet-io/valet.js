@@ -1,8 +1,9 @@
-@import '../styles/overlay'
-@import '../styles/position'
-@import '../styles/button'
+@import 'overlay'
+@import 'position'
+@import 'button'
 
 #valet-io-loading-overlay
+	font-family "Century Gothic", CenturyGothic, AppleGothic, sans-serif
 	overlay()
 
 #valet-io-loading-wrapper
@@ -22,16 +23,11 @@
 	height 100%
 
 #valet-io-loading-spinner
-	height 10px
+	margin-top 100px
+	height 120px
 
 	.spinner
 		margin 2em auto
-
-#valet-io-loading-text
-	color white
-	font-size 2em
-	text-transform uppercase
-	text-align center
 
 #valet-io-loading-close
 	display block

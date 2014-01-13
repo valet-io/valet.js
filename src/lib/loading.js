@@ -59,7 +59,11 @@ define(
 		LoadingOverlay.prototype.attachSpinner = function() {
 			var element = document.getElementById('valet-io-loading-spinner');
 			var spinner = new Spinner({
-				color: '#fff'
+				color: '#fff',
+				length: 30,
+				lines: 15,
+				radius: 50,
+				width: 12
 			}).spin();
 			element.appendChild(spinner.el);
 		};
