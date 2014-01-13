@@ -33,6 +33,8 @@ define(
 					callback.call(this, err);
 				}
 			}.bind(this));
+
+			return this;
 		};
 
 		LoadingOverlay.prototype.destroy = function() {
@@ -47,6 +49,10 @@ define(
 		LoadingOverlay.prototype.hide = function() {
 			this.element.style.display = 'none';
 			this.emit('hide');
+		};
+
+		LoadingOverlay.prototype.isVisible = function() {
+			return this.element.style.display === 'block';
 		};
 
 		LoadingOverlay.prototype.attachListeners = function() {

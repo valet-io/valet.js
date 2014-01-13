@@ -87,6 +87,10 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 
 			describe('Toggling Visibility', function() {
 
+				beforeEach(function() {
+					this.modal.isReady = true;
+				});
+
 				it('can be shown', function() {
 					this.modal.show();
 					expect(this.element.style.display).to.be('block');
@@ -112,35 +116,25 @@ define(['src/lib/modal', 'src/shims/function/bind'], function(Modal) {
 					this.server.respondWith('GET', '/base/templates/modal/modal.css',
 						[200, {}, 'css']);
 					this.server.autoRespond = true;
-					this.server.autoRespondAfter(100);
+					this.server.autoRespondAfter = 100;
 					this.callback = sinon.spy();
 					this.modal.load(this.callback);
-					this.modal.show();
+					this.modal.show(done);
 				});
 
 				afterEach(function() {
 					this.server.restore()
 				});
 
-				it('shows a loading overlay');
+				it('shows a loading overlay', function() {
+					expect(this.modal.loading.isVisible()).to.be(true);
+				});
 
 				it('can hide the overlay while load continues');
 
-				describe('Load succeeds', function() {
+				it('destroys the overlay when load completes');
 
-					it('destroys the DOM elements');
-
-				});
-
-				describe('Load fails', function() {
-
-					it('shows an error if the load fails');
-
-					it('hides the load spinner');
-
-				});
-
-			})
+			});
 
 		});
 

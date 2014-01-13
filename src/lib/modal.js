@@ -1,8 +1,9 @@
 define(['src/lib/event-emitter',
 	'src/lib/template',
 	'src/lib/dom-listener',
+	'src/lib/loading',
 	'src/shims/function/bind'],
-	function(EventEmitter, template, DOMListener) {
+	function(EventEmitter, template, DOMListener, LoadingOverlay) {
 		'use strict';
 
 		function Modal(element, options) {
@@ -32,6 +33,7 @@ define(['src/lib/event-emitter',
 					if (!err) {
 						this.element.innerHTML = template;
 						this.emit('ready');
+						this.isReady = true;
 						this.frame = new DOMListener(window, 'message');
 						this.frame.on('message', function(event) {
 							this.emit('frame::' + event.data);
@@ -44,8 +46,17 @@ define(['src/lib/event-emitter',
 				}.bind(this));
 		};
 
-		Modal.prototype.show = function() {
-			this.element.style.display = 'block';
+		Modal.prototype.show = function(callback) {
+			if (this.isReady) {
+				this.element.style.display = 'block';
+				if (callback) { callback(); }
+			} else {
+				this.loading = new LoadingOverlay(document.body);
+				this.loading.initialize(function() {
+					this.loading.show();
+					callback();
+				}.bind(this));
+			}
 		};
 
 		Modal.prototype.hide = function() {
