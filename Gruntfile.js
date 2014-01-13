@@ -48,6 +48,8 @@ module.exports = function(grunt) {
 					{pattern: 'components/**/*.js', included: false},
 					{pattern: 'templates/**/*.hbs', included: false},
 					{pattern: 'templates/**/*.styl', included: false},
+					{pattern: 'test/integration/html/*.html', included: false},
+					{pattern: 'test/integration/**/*.js', included: false},
 					'test/setup.js'
 				],
 				exclude: ['src/initialize.js'],
@@ -59,6 +61,11 @@ module.exports = function(grunt) {
 					'templates/**/*.styl': ['stylus']
 				},
 				browsers: ['PhantomJS'],
+				stylusPreprocessor: {
+					options: {
+						paths: ['templates/styles']
+					}
+				},
 				background: true
 			}
 		},

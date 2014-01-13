@@ -1,0 +1,12 @@
+<head>
+<script src="../../../node_modules/requirejs/require.js"></script>
+<script src="../config.js"></script>
+<script>
+require(['src/lib/loading'], function(LoadingOverlay) {
+	new LoadingOverlay(document.body).initialize(function() {
+		this.show();
+	});
+});
+</script>
+</head>
+<body></body>

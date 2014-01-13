@@ -29,7 +29,9 @@ define(
 					this.attachListeners();
 					this.attachSpinner();
 				}
-				callback(err);
+				if (callback) {
+					callback.call(this, err);
+				}
 			}.bind(this));
 		};
 
@@ -56,7 +58,9 @@ define(
 
 		LoadingOverlay.prototype.attachSpinner = function() {
 			var element = document.getElementById('valet-io-loading-spinner');
-			var spinner = new Spinner().spin();
+			var spinner = new Spinner({
+				color: '#fff'
+			}).spin();
 			element.appendChild(spinner.el);
 		};
 
