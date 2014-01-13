@@ -7,7 +7,7 @@ define(['src/lib/event-emitter'], function(EventEmitter) {
 		});
 
 		it('begins with no events', function() {
-			for(var event in this.emitter._events) {
+			for (var event in this.emitter._events) {
 				expect(event).to.be(undefined);
 			}
 		});
@@ -18,7 +18,7 @@ define(['src/lib/event-emitter'], function(EventEmitter) {
 		});
 
 		it('can remove listeners', function() {
-			var handler = function() {}
+			var handler = function() {};
 			this.emitter.on('event', handler);
 			this.emitter.removeListener('event', handler);
 			expect(this.emitter._events.event).to.have.length(0);
@@ -28,15 +28,15 @@ define(['src/lib/event-emitter'], function(EventEmitter) {
 
 			it('calls all listeners when emitting an event', function() {
 				var listener1 = sinon.spy(),
-				    listener2 = sinon.spy();
+				listener2 = sinon.spy();
 
-			    this.emitter.on('event', listener1);
-			    this.emitter.on('event', listener2);
+				this.emitter.on('event', listener1);
+				this.emitter.on('event', listener2);
 
-			    this.emitter.emit('event');
+				this.emitter.emit('event');
 
-			    expect(listener1.called).to.be(true);
-			    expect(listener2.called).to.be(true);
+				expect(listener1.called).to.be(true);
+				expect(listener2.called).to.be(true);
 			});
 
 			it('returns true if there are listeners', function() {
@@ -46,6 +46,30 @@ define(['src/lib/event-emitter'], function(EventEmitter) {
 
 			it('returns false if there are no listeners', function() {
 				expect(this.emitter.emit('event')).to.be(false);
+			});
+
+		});
+
+		describe('Proxying events', function() {
+
+			beforeEach(function() {
+				this.emitter2 = new EventEmitter().proxy(this.emitter);
+				this.listener = sinon.spy();
+				sinon.spy(this.emitter, 'emit');
+				this.emitter2.on('pEvent', this.listener);
+				this.emitter2.emit('pEvent', 'arg1', 'arg2');
+			});
+
+			it('registers the proxy on the target', function() {
+				expect(this.emitter2._proxies).to.contain(this.emitter);
+			});
+
+			it('does not change source listener behavior', function() {
+				sinon.assert.calledWith(this.listener, 'arg1', 'arg2');
+			});
+
+			it('emits events from the source on the target', function() {
+				sinon.assert.calledWith(this.emitter.emit, 'pEvent', 'arg1', 'arg2');
 			});
 
 		});
