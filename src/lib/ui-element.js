@@ -66,7 +66,7 @@ define(['src/lib/event-emitter', 'src/lib/dom-listener', 'src/lib/template', 'sr
 	// Loading template
 
 	UIElement.prototype.load = function(data, callback) {
-		template(this.templateName, data, function(err, template) {
+		template.fetch(this.templateName, data, function(err, template) {
 			if (!err) {
 				this.element.innerHTML = template;
 				this.emit('ready');

@@ -30,7 +30,7 @@ define(['src/lib/template', 'src/shims/function/bind'], function(template) {
 					this.err = err;
 					done();
 				}.bind(this));
-				template('foo', {property: 'templateVal'}, this.callback);
+				template.fetch('foo', {property: 'templateVal'}, this.callback);
 			});
 
 			it('compiles the handlebars template', function() {
@@ -53,7 +53,7 @@ define(['src/lib/template', 'src/shims/function/bind'], function(template) {
 				this.callback = sinon.spy(function() {
 					done();
 				});
-				template('bad', null, this.callback);
+				template.fetch('bad', null, this.callback);
 			});
 
 			it('calls the callback with the error', function() {
