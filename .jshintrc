@@ -120,7 +120,8 @@
         "expect",
         "define",
         "sinon",
-        "require"
+        "require",
+        "requirejs"
     ],
     "indent"        : 4         // Specify indentation spacing
 }
