@@ -60,7 +60,7 @@ define(['src/lib/event-emitter', 'src/lib/dom-listener'], function(EventEmitter,
 	};
 
 	DOMElement.prototype.listen = function() {
-		new DOMListener(this.element, arguments).proxy(this);
+		return new DOMListener(this.element, arguments).proxy(this);
 	};
 
 	return DOMElement;
