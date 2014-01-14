@@ -56,6 +56,9 @@ define(['src/lib/event-emitter'], function(EventEmitter) {
 				this.emitter2 = new EventEmitter().proxy(this.emitter);
 				this.listener = sinon.spy();
 				sinon.spy(this.emitter, 'emit');
+				sinon.spy(this.emitter2, 'emit');
+				this.emitter.on('argless', function() {});
+				this.emitter2.emit('argless');
 				this.emitter2.on('pEvent', this.listener);
 				this.emitter2.emit('pEvent', 'arg1', 'arg2');
 			});
@@ -64,12 +67,20 @@ define(['src/lib/event-emitter'], function(EventEmitter) {
 				expect(this.emitter2._proxies).to.contain(this.emitter);
 			});
 
+			it('emits events from the source on the proxy', function() {
+				sinon.assert.calledWith(this.emitter.emit, 'argless');
+			});
+
 			it('does not change source listener behavior', function() {
 				sinon.assert.calledWith(this.listener, 'arg1', 'arg2');
 			});
 
-			it('emits events from the source on the target', function() {
+			it('passes through arguments to the proxy', function() {
 				sinon.assert.calledWith(this.emitter.emit, 'pEvent', 'arg1', 'arg2');
+			});
+
+			it('returns true for #emit on the source when proxy emit returns true', function() {
+				expect(this.emitter2.emit.getCall(0).returnValue).to.be(true);
 			});
 
 		});
