@@ -60,7 +60,7 @@ define(['src/lib/event-emitter'], function(EventEmitter) {
 				this.emitter2.emit('pEvent', 'arg1', 'arg2');
 			});
 
-			it('registers the proxy on the target', function() {
+			it('registers the proxy target on the source emitter', function() {
 				expect(this.emitter2._proxies).to.contain(this.emitter);
 			});
 
