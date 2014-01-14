@@ -1,17 +1,26 @@
-describe('UIElement', function() {
+define(['test/util'], function(TestUtil) {
 	'use strict';
 
+	var UIElement;
+	var test = new TestUtil();
 
-	require.undef('src/lib/template');
-	define(
-		'src/lib/template',
-		['test/stubs/template.stub'],
-		function(templateStub) {
-			return sinon.spy(templateStub);
-		}
-	);
+	beforeEach(function(done) {
+		var template = this.template = {
+			fetch: function() {}
+		};
+		test.stub('src/lib/template', template);
 
-	define(['src/lib/ui-element', 'src/lib/template'], function(UIElement, template) {
+		test.load('src/lib/ui-element', function(uie) {
+			UIElement = uie;
+			done();
+		})
+	});
+
+	afterEach(function() {
+		test.reset();
+	});
+
+	describe('UIElement', function() {
 
 		it('is an EventEmitter', function() {
 			expect(new UIElement()).to.have.property('emit');
@@ -144,20 +153,25 @@ describe('UIElement', function() {
 
 		describe('Template', function() {
 
+			beforeEach(function() {
+				sinon.stub(this.template, 'fetch')
+					.withArgs('templateName')
+					.yields(null, 'template');
+			});
+
 			beforeEach(function(done) {
 				this.uiElement.templateName = 'templateName';
 				this.data = {templated: 'value'};
-				template.reset();
 
 				this.uiElement.load(this.data, done);
 			});
 
-			it('calls the template with the name and data', function() {
-				sinon.assert.calledWith(template, this.uiElement.templateName, this.data);
+			afterEach(function() {
+				this.template.fetch.restore();
 			});
 
 			it('sets the element innerHTML', function() {
-				expect(this.uiElement.element.innerHTML).to.match(/^<style>/);
+				expect(this.uiElement.element.innerHTML).to.be('template');
 			});
 
 			it('emits a ready event', function() {
@@ -189,6 +203,6 @@ describe('UIElement', function() {
 
 	});
 
-	require.undef('src/lib/template');
+	requirejs.undef('src/lib/template');
 
 });
