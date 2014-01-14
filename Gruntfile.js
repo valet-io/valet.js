@@ -39,37 +39,6 @@ module.exports = function(grunt) {
 				src: '<%= app.build.js %>'
 			}
 		},
-		karma: {
-			options: {
-				runnerPort: 9876,
-				files: [
-					{pattern: patterns.src, included: false},
-					{pattern: patterns.spec, included: false},
-					{pattern: 'components/**/*.js', included: false},
-					{pattern: 'templates/**/*.hbs', included: false},
-					{pattern: 'templates/**/*.styl', included: false},
-					{pattern: 'test/integration/html/*.html', included: false},
-					{pattern: 'test/integration/**/*.js', included: false},
-					{pattern: 'test/stubs/**/*.js', included: false},
-					'test/setup.js'
-				],
-				exclude: ['src/initialize.js'],
-				frameworks: ['mocha', 'requirejs', 'expect', 'sinon'],
-				browsers: ['PhantomJS']
-			},
-			unit: {
-				preprocessors: {
-					'templates/**/*.styl': ['stylus']
-				},
-				browsers: ['PhantomJS'],
-				stylusPreprocessor: {
-					options: {
-						paths: ['styles']
-					}
-				},
-				background: true
-			}
-		},
 		connect: {
 			test: {
 				options: {
