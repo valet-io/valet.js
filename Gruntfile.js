@@ -50,6 +50,7 @@ module.exports = function(grunt) {
 					{pattern: 'templates/**/*.styl', included: false},
 					{pattern: 'test/integration/html/*.html', included: false},
 					{pattern: 'test/integration/**/*.js', included: false},
+					{pattern: 'test/stubs/**/*.js', included: false},
 					'test/setup.js'
 				],
 				exclude: ['src/initialize.js'],

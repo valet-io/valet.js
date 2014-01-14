@@ -119,7 +119,8 @@
         "afterEach",
         "expect",
         "define",
-        "sinon"
+        "sinon",
+        "require"
     ],
     "indent"        : 4         // Specify indentation spacing
 }
