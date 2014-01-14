@@ -32,7 +32,9 @@ define(function() {
 			if (this._proxies) {
 				for (var j = 0; j < this._proxies.length; j += 1) {
 					var proxy = this._proxies[j];
-					if (proxy.emit.apply(proxy, [event].concat(args))) {
+					var name = proxy.prefix ? proxy.prefix + ':' + event : event;
+
+					if (proxy.target.emit.apply(proxy.target, [name].concat(args))) {
 						handled = true;
 					}
 				}
@@ -40,9 +42,9 @@ define(function() {
 
 			return handled;
 		},
-		proxy: function(target) {
+		proxy: function(target, prefix) {
 			this._proxies = this._proxies || [];
-			this._proxies.push(target);
+			this._proxies.push({target: target, prefix: prefix});
 			return this;
 		}
 	};

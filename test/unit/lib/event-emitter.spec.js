@@ -53,7 +53,9 @@ define(['src/lib/event-emitter'], function(EventEmitter) {
 		describe('Proxying events', function() {
 
 			beforeEach(function() {
-				this.emitter2 = new EventEmitter().proxy(this.emitter);
+				this.emitter2 = new EventEmitter()
+					.proxy(this.emitter)
+					.proxy(this.emitter, 'proxy');
 				this.listener = sinon.spy();
 				sinon.spy(this.emitter, 'emit');
 				sinon.spy(this.emitter2, 'emit');
@@ -64,11 +66,19 @@ define(['src/lib/event-emitter'], function(EventEmitter) {
 			});
 
 			it('registers the proxy target on the source emitter', function() {
-				expect(this.emitter2._proxies).to.contain(this.emitter);
+				expect(this.emitter2._proxies[0].target).to.be(this.emitter);
+			});
+
+			it('can register a prefix for each target', function() {
+				expect(this.emitter2._proxies[1].prefix).to.be('proxy');
 			});
 
 			it('emits events from the source on the proxy', function() {
 				sinon.assert.calledWith(this.emitter.emit, 'argless');
+			});
+
+			it('emits events with a prefix if registered', function() {
+				sinon.assert.calledWith(this.emitter.emit, 'proxy:argless');
 			});
 
 			it('does not change source listener behavior', function() {
