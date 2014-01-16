@@ -217,6 +217,4 @@ define(['test/util'], function(TestUtil) {
 
 	});
 
-	requirejs.undef('src/lib/template');
-
 });
