@@ -47,6 +47,10 @@ define(['test/util', 'require'], function(TestUtil, require) {
 				.to.eql(this.event);
 		});
 
+		it('does not expose private analytics methods', function() {
+			expect(this.api).to.not.have.property('queue');
+		});
+
 	});
 
 });
