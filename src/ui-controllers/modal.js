@@ -8,7 +8,7 @@ define(
 
 		function Modal(options) {
 			UIElement.call(this, 'div', 'valet-io-modal-container');
-			
+
 			this.options = options;
 			this.on('ready', function() {
 				this.ready = true;
@@ -20,17 +20,23 @@ define(
 		Modal.prototype.templateName = 'modal';
 
 		// Modal is loaded asynchronously, so we override `show`
-		var uiShow = Modal.prototype.show;
 		Modal.prototype.show = function() {
+			var show = function() {
+				UIElement.prototype.show.call(this);
+			}.bind(this);
 			if (this.ready) {
-				uiShow.call(this);
+				show();
 			} else {
 				this.loading = new LoadingOverlay();
 				this.loading
 					.insertBefore(this.element)
-					.load(null, function() {
-						this.show();
-					});
+					.load()
+					.on('ready', this.loading.show);
+
+				this.on('ready', function() {
+					this.loading.hide();
+					show();
+				});
 			}
 		};
 

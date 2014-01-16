@@ -19,31 +19,52 @@ define(['src/ui-controllers/modal', 'src/shims/function/bind'], function(Modal) 
 			expect(this.modal).to.have.property('emit');
 		});
 
-		describe('Showing the modal before load', function() {
+		describe('Showing', function() {
 
-			beforeEach(function() {
-				this.server = sinon.fakeServer.create();
-				this.server.respondWith('GET', '/base/templates/modal/modal.css',
-					[200, {}, 'css']);
-				this.server.autoRespond = true;
-				this.server.autoRespondAfter = 100;
-				this.callback = sinon.spy();
-				this.modal.load(this.options, this.callback);
-				this.modal.show();
+			describe('Before Load', function() {
+
+				beforeEach(function(done) {
+					this.modal.show();
+					this.loading = this.modal.loading;
+					this.loading.on('ready', done);
+				});
+
+				it('does not immediately show the modal', function() {
+					expect(this.modal.isVisible()).to.be(false);
+				});
+
+				it('instantiates the loading overlay', function() {
+					expect(this.modal.loading).to.not.be(undefined);
+				});
+
+				it('shows the overlay when it is ready', function() {
+					expect(this.loading.isVisible()).to.be(true);
+				});
+
+				it('hides the overlay when load completes', function() {
+					this.modal.emit('ready');
+					expect(this.loading.isVisible()).to.be(false)
+				});
+
+				it('shows the overlay when load completes', function() {
+					this.modal.emit('ready');
+					expect(this.modal.isVisible()).to.be(true);
+				});
+
 			});
 
-			afterEach(function() {
-				this.server.restore()
+			describe('After Load', function() {
+
+				beforeEach(function() {
+					this.modal.ready = true;
+					this.modal.show();
+				});
+
+				it('shows the modal immediately', function() {
+					expect(this.modal.isVisible()).to.be(true);
+				});
+
 			});
-
-			it('intiates the loading overlay', function() {
-				console.log(this.modal.loading._events);
-				expect(this.modal.loading.isVisible()).to.be(true);
-			});
-
-			it('can hide the overlay while load continues');
-
-			it('destroys the overlay when load completes');
 
 		});
 
