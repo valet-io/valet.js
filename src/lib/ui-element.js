@@ -82,7 +82,7 @@ define(['src/lib/event-emitter', 'src/lib/dom-listener', 'src/lib/template', 'sr
 				this.element.innerHTML = template;
 				this.emit('ready');
 			}
-			callback(err);
+			callback.call(this, err);
 		}.bind(this));
 	};
 
