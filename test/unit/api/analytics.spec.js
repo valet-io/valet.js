@@ -1,23 +1,23 @@
-define(['src/api/analytics', 'src/lib/analytics'], function(api, Analytics) {
+define(['src/api/analytics', 'src/lib/analytics'], function(analytics, Analytics) {
 
 	describe('Tracking', function() {
 
 		beforeEach(function() {
 			this.event = new Analytics.Event('click');
-			api.queue.empty();
+			analytics.queue.empty();
 		});
 
 		it('accepts event objects', function() {
-			expect(api.track(this.event)).to.be(this.event);
+			expect(analytics.track(this.event)).to.be(this.event);
 		});
 
 		it('casts plain objects into events', function() {
-			expect(api.track({name: this.event.name, data: this.event.data})).to.be.an(Analytics.Event);
+			expect(analytics.track({name: this.event.name, data: this.event.data})).to.be.an(Analytics.Event);
 		});
 
 		it('pushes events into the queue', function() {
-			api.track(this.event);
-			expect(api.queue._queue[0])
+			analytics.track(this.event);
+			expect(analytics.queue._queue[0])
 				.to.eql(this.event);
 		});
 
