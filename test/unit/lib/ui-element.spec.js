@@ -1,33 +1,31 @@
 define(['test/util'], function(TestUtil) {
 	'use strict';
 
-	var UIElement;
-	var test = new TestUtil();
-
 	beforeEach(function(done) {
-		var template = this.template = {
+		this.testUtil = new TestUtil();
+		this.template = {
 			fetch: function() {}
 		};
-		test.stub('src/lib/template', template);
+		this.testUtil.stub('src/lib/template', this.template);
 
-		test.load('src/lib/ui-element', function(uie) {
-			UIElement = uie;
+		this.testUtil.load('src/lib/ui-element', function(uie) {
+			this.UIElement = uie;
 			done();
-		})
+		}.bind(this));
 	});
 
 	afterEach(function() {
-		test.reset();
+		this.testUtil.reset();
 	});
 
 	describe('UIElement', function() {
 
 		it('is an EventEmitter', function() {
-			expect(new UIElement()).to.have.property('emit');
+			expect(new this.UIElement()).to.have.property('emit');
 		});
 
 		beforeEach(function() {
-			this.uiElement = new UIElement();
+			this.uiElement = new this.UIElement();
 			sinon.spy(this.uiElement, 'emit');
 		});
 
@@ -38,15 +36,15 @@ define(['test/util'], function(TestUtil) {
 			});
 
 			it('can be a custom tag', function() {
-				expect(new UIElement('span').element.tagName).to.be('SPAN');
+				expect(new this.UIElement('span').element.tagName).to.be('SPAN');
 			});
 
 			it('can set an ID', function() {
-				expect(new UIElement(null, 'myId').element.getAttribute('id')).to.be('myId');
+				expect(new this.UIElement(null, 'myId').element.getAttribute('id')).to.be('myId');
 			});
 
 			it('can set other attributes', function() {
-				expect(new UIElement(null, null, {name: 'myName'}).element.getAttribute('name')).to.be('myName');
+				expect(new this.UIElement(null, null, {name: 'myName'}).element.getAttribute('name')).to.be('myName');
 			});
 
 			it('starts hidden', function() {
