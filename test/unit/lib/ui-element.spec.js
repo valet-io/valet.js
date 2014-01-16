@@ -62,6 +62,15 @@ define(['test/util'], function(TestUtil) {
 
 		describe('Insertion/Removal', function() {
 
+			beforeEach(function() {
+				this.other = document.createElement('div');
+				document.body.appendChild(this.other);
+			});
+
+			afterEach(function() {
+				document.body.removeChild(this.other);
+			});
+
 			it('can be appended to a target with #prepend', function() {
 				this.uiElement.prepend(document.body);
 				expect(document.body.firstChild).to.be(this.uiElement.element);
@@ -70,6 +79,16 @@ define(['test/util'], function(TestUtil) {
 			it('can be prepended to a target with #append', function() {
 				this.uiElement.append(document.body);
 				expect(document.body.lastChild).to.be(this.uiElement.element);
+			});
+
+			it('can be inserted before a sibling with #insertBefore', function() {
+				this.uiElement.insertBefore(this.other);
+				expect(this.other.previousSibling).to.be(this.uiElement.element);
+			});
+
+			it('can be inserted after a sibling with #insertAfter', function() {
+				this.uiElement.insertAfter(this.other);
+				expect(this.other.nextSibling).to.be(this.uiElement.element);
 			});
 
 			it('can be removed with #remove', function() {

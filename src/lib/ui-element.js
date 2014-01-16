@@ -32,6 +32,16 @@ define(['src/lib/event-emitter', 'src/lib/dom-listener', 'src/lib/template', 'sr
 		return this;
 	};
 
+	UIElement.prototype.insertBefore = function(sibling) {
+		sibling.parentNode.insertBefore(this.element, sibling);
+		return this;
+	};
+
+	UIElement.prototype.insertAfter = function(sibling) {
+		sibling.parentNode.insertBefore(this.element, sibling.nextSibling);
+		return this;
+	};
+
 	UIElement.prototype.remove = function() {
 		this.element.parentNode.removeChild(this.element);
 		return this;
