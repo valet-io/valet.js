@@ -1,7 +1,7 @@
 define(['src/lib/analytics', 'src/lib/http'], function(Analytics, Http) {
 	'use strict';
 
-	describe('Analytics library', function() {
+	describe('Analytics', function() {
 
 		beforeEach(function() {
 			this.analytics = new Analytics();
