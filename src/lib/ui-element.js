@@ -1,11 +1,14 @@
 define(['src/lib/event-emitter', 'src/lib/dom-listener', 'src/lib/template', 'src/shims/function/bind'], function(EventEmitter, DOMListener, template) {
 	'use strict';
 
-	function UIElement(element) {
-		this.element = element;
+	function UIElement(tag, id, attributes) {
+		this.element = this.createElement(tag, id, attributes);
+		EventEmitter.call(this);
 	}
 
-	UIElement.create = function(tag, id, attributes) {
+	UIElement.prototype = Object.create(EventEmitter.prototype);
+
+	UIElement.prototype.createElement = function(tag, id, attributes) {
 		var element = document.createElement(tag || 'DIV');
 		element.setAttribute('id', id || '');
 		for (var attribute in attributes) {
@@ -15,10 +18,8 @@ define(['src/lib/event-emitter', 'src/lib/dom-listener', 'src/lib/template', 'sr
 		}
 		element.style.display = 'none';
 
-		return new UIElement(element);
+		return element;
 	};
-
-	UIElement.prototype = new EventEmitter();
 
 	// Insertion/removal of elements
 

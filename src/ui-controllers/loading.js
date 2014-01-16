@@ -2,13 +2,15 @@ define(['src/lib/ui-element', 'spin', 'src/shims/function/bind'], function(UIEle
 	'use strict';
 
 	function LoadingOverlay() {
-
+		UIElement.call(this);
 		this.on('ready', function() {
 			this.attachSpinner();
 		});
 	}
 
-	LoadingOverlay.prototype = UIElement.create('div', 'valet-io-loading-overlay');
+	LoadingOverlay.prototype = Object.create(UIElement.prototype);
+
+	// LoadingOverlay.prototype.element = UIElement.create('div', 'valet-io-loading-overlay');
 
 	LoadingOverlay.prototype.templateName = 'loading';
 

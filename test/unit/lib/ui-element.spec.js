@@ -27,7 +27,7 @@ define(['test/util'], function(TestUtil) {
 		});
 
 		beforeEach(function() {
-			this.uiElement = UIElement.create();
+			this.uiElement = new UIElement();
 			sinon.spy(this.uiElement, 'emit');
 		});
 
@@ -38,24 +38,19 @@ define(['test/util'], function(TestUtil) {
 			});
 
 			it('can be a custom tag', function() {
-				expect(UIElement.create('span').element.tagName).to.be('SPAN');
+				expect(new UIElement('span').element.tagName).to.be('SPAN');
 			});
 
 			it('can set an ID', function() {
-				expect(UIElement.create(null, 'myId').element.getAttribute('id')).to.be('myId');
+				expect(new UIElement(null, 'myId').element.getAttribute('id')).to.be('myId');
 			});
 
 			it('can set other attributes', function() {
-				expect(UIElement.create(null, null, {name: 'myName'}).element.getAttribute('name')).to.be('myName');
+				expect(new UIElement(null, null, {name: 'myName'}).element.getAttribute('name')).to.be('myName');
 			});
 
 			it('starts hidden', function() {
 				expect(this.uiElement.element.style.display).to.be('none');
-			});
-
-			it('can wrap an existing DOM node', function() {
-				var element = document.createElement('div');
-				expect(new UIElement(element).element).to.be(element);
 			});
 
 		});

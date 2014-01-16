@@ -3,7 +3,12 @@ define(['src/lib/event-emitter'], function(EventEmitter) {
 	describe('EventEmitter', function() {
 
 		beforeEach(function() {
-			this.emitter = new EventEmitter();
+			this.Emitter = function() {
+				EventEmitter.call(this);
+			};
+			this.Emitter.prototype = Object.create(EventEmitter.prototype);
+
+			this.emitter = new this.Emitter();
 		});
 
 		it('begins with no events', function() {
@@ -53,7 +58,7 @@ define(['src/lib/event-emitter'], function(EventEmitter) {
 		describe('Proxying events', function() {
 
 			beforeEach(function() {
-				this.emitter2 = new EventEmitter()
+				this.emitter2 = new this.Emitter()
 					.proxy(this.emitter)
 					.proxy(this.emitter, 'proxy');
 				this.listener = sinon.spy();

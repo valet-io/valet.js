@@ -4,7 +4,7 @@ define(function() {
 	// A lightweight EventEmitter implementation
 
 	function EventEmitter() {
-		this._events = {};
+		this._events = this._events || {};
 	}
 
 	EventEmitter.prototype = {

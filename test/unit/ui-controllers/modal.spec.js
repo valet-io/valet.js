@@ -7,12 +7,8 @@ define(['src/ui-controllers/modal', 'src/shims/function/bind'], function(Modal) 
 			this.modal = new Modal({
 				url: 'http://localhost:9800/frame.html',
 				page: location.href
-			});
+			}).append(document.body);
 			sinon.spy(this.modal, 'emit');
-		});
-
-		afterEach(function() {
-			this.modal.emit.restore();
 		});
 
 		it('is a UI Element', function() {
@@ -23,38 +19,31 @@ define(['src/ui-controllers/modal', 'src/shims/function/bind'], function(Modal) 
 			expect(this.modal).to.have.property('emit');
 		});
 
-		describe('Element', function() {
+		describe('Showing the modal before load', function() {
 
 			beforeEach(function() {
-				this.modal.append(document.body);
+				this.server = sinon.fakeServer.create();
+				this.server.respondWith('GET', '/base/templates/modal/modal.css',
+					[200, {}, 'css']);
+				this.server.autoRespond = true;
+				this.server.autoRespondAfter = 100;
+				this.callback = sinon.spy();
+				this.modal.load(this.options, this.callback);
+				this.modal.show();
 			});
 
-			xdescribe('Showing the modal before load', function() {
-
-				beforeEach(function(done) {
-					this.server = sinon.fakeServer.create();
-					this.server.respondWith('GET', '/base/templates/modal/modal.css',
-						[200, {}, 'css']);
-					this.server.autoRespond = true;
-					this.server.autoRespondAfter = 100;
-					this.callback = sinon.spy();
-					this.modal.load(this.callback);
-					this.modal.show(done);
-				});
-
-				afterEach(function() {
-					this.server.restore()
-				});
-
-				it('shows a loading overlay', function() {
-					expect(this.modal.loading.isVisible()).to.be(true);
-				});
-
-				it('can hide the overlay while load continues');
-
-				it('destroys the overlay when load completes');
-
+			afterEach(function() {
+				this.server.restore()
 			});
+
+			it('intiates the loading overlay', function() {
+				console.log(this.modal.loading._events);
+				expect(this.modal.loading.isVisible()).to.be(true);
+			});
+
+			it('can hide the overlay while load continues');
+
+			it('destroys the overlay when load completes');
 
 		});
 

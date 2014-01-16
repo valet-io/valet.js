@@ -16,9 +16,11 @@ define(['src/lib/event-emitter', 'src/shims/function/bind'], function(EventEmitt
 				element.attachEvent('on' + event, this.handle(event));
 			}
 		}
+
+		EventEmitter.call(this);
 	}
 
-	DOMListener.prototype = new EventEmitter();
+	DOMListener.prototype = Object.create(EventEmitter.prototype);
 
 	DOMListener.prototype.handle = function(name) {
 		return function(event) {

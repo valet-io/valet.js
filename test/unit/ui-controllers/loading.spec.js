@@ -8,7 +8,7 @@ define(['src/ui-controllers/loading'], function(LoadingOverlay) {
 		});
 
 		afterEach(function() {
-			this.overlay.remove();
+			// this.overlay.remove();
 		});
 
 		it('is an event emitter', function() {
