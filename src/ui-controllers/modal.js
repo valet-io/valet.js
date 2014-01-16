@@ -1,9 +1,8 @@
-define([
-	'src/lib/ui-element',
-	'src/lib/dom-listener',
+define(
+	['src/lib/ui-element',
 	'src/ui-controllers/loading',
 	'src/shims/function/bind'],
-	function(UIElement, DOMListener, LoadingOverlay) {
+	function(UIElement, LoadingOverlay) {
 		
 		'use strict';
 
