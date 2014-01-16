@@ -4,8 +4,7 @@ define(['src/lib/ui-element', 'spin', 'src/shims/function/bind'], function(UIEle
 	function LoadingOverlay(target) {
 		this.target = target;
 
-		this.on('load', function() {
-			this.attachListeners();
+		this.on('ready', function() {
 			this.attachSpinner();
 		});
 	}

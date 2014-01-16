@@ -4,7 +4,7 @@ define(['src/ui-controllers/loading'], function(LoadingOverlay) {
 	describe('Loading Overlay', function() {
 
 		beforeEach(function() {
-			this.overlay = new LoadingOverlay(document.body);
+			this.overlay = new LoadingOverlay().prepend(document.body);
 		});
 
 		it('is an event emitter', function() {
@@ -21,7 +21,7 @@ define(['src/ui-controllers/loading'], function(LoadingOverlay) {
 				this.overlay.load(null, done);
 			});
 
-			xit('inserts the spinner', function() {
+			it('inserts the spinner', function() {
 				expect(document.getElementById('valet-io-loading-spinner').firstChild.getAttribute('class')).to.be('spinner');
 			});
 
