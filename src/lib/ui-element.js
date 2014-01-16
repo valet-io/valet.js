@@ -82,8 +82,9 @@ define(['src/lib/event-emitter', 'src/lib/dom-listener', 'src/lib/template', 'sr
 				this.element.innerHTML = template;
 				this.emit('ready');
 			}
-			callback.call(this, err);
+			if (callback) { callback.call(this, err); }
 		}.bind(this));
+		return this;
 	};
 
 	// DOM Events
