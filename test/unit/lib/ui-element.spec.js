@@ -1,24 +1,24 @@
 define(['test/util'], function(TestUtil) {
 	'use strict';
 
-	beforeEach(function(done) {
-		this.testUtil = new TestUtil();
-		this.template = {
-			fetch: function() {}
-		};
-		this.testUtil.stub('src/lib/template', this.template);
-
-		this.testUtil.load('src/lib/ui-element', function(uie) {
-			this.UIElement = uie;
-			done();
-		}.bind(this));
-	});
-
-	afterEach(function() {
-		this.testUtil.reset();
-	});
-
 	describe('UIElement', function() {
+
+		beforeEach(function(done) {
+			this.testUtil = new TestUtil();
+			this.template = {
+				fetch: function() {}
+			};
+			this.testUtil.stub('src/lib/template', this.template);
+
+			this.testUtil.load('src/lib/ui-element', function(uie) {
+				this.UIElement = uie;
+				done();
+			}.bind(this));
+		});
+
+		afterEach(function() {
+			this.testUtil.reset();
+		});
 
 		it('is an EventEmitter', function() {
 			expect(new this.UIElement()).to.have.property('emit');
