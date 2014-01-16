@@ -1,8 +1,7 @@
 define(['src/lib/ui-element', 'spin', 'src/shims/function/bind'], function(UIElement, Spinner) {
 	'use strict';
 
-	function LoadingOverlay(target) {
-		this.target = target;
+	function LoadingOverlay() {
 
 		this.on('ready', function() {
 			this.attachSpinner();
